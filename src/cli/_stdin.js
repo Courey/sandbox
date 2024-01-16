@@ -9,7 +9,13 @@ module.exports = function handleStdin (params) {
   if (process.stdin.isTTY) {
     process.stdin.setRawMode(true)
   }
+
+  // process.stdin.on('SIGINT', () => {
+  //   console.log('Received SIGINT.');
+  // });//COUREY
+
   process.stdin.on('keypress', function now (input, key) {
+    update.warn(`KEYPRESS SEQUENCE: ${key.sequence}`)
     if (input === 'H') {
       rehydrate({
         timer: 'rehydrateAll',
@@ -39,14 +45,20 @@ module.exports = function handleStdin (params) {
       }
       else end()
     }
+    process.on('SIGINT', () => {
+      console.log('Received SIGINT HERE. FINALLY.');
+      exit(0)
+    });//COUREY
   })
 
   function end () {
+    update.warn(`ENDING FUNCTION`)
     sandbox.end(function (err) {
       if (err) {
         update.err(err)
         process.exit(1)
       }
+      update.warn(`EXITING PROCESS`)
       process.exit(0)
     })
   }

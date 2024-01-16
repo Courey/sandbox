@@ -29,6 +29,8 @@ module.exports = function sandboxStartPlugins (params, options, callback) {
       .then(() => {
         restore()
         let finish = Date.now()
+        update.status(`PLUGINS: ${plugins}`)
+        update.status(`NAME: ${name}`)
         update.done(`Ran Sandbox ${name} plugin${plural} in ${finish - start}ms`)
         callback()
       })

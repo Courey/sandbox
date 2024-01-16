@@ -92,6 +92,9 @@ function _start (params, callback) {
     // Kick off any Sandbox startup plugins
     function (callback) {
       let options = { method: 'start', name: 'startup' }
+      update.warn('!!! Kick off any Sandbox startup plugins')
+      // update.warn(`PARAMS: ${JSON.stringify(params)}`)
+      update.warn(`CALLBACK: ${callback}`)
       plugins(params, options, callback)
     },
 
@@ -102,11 +105,19 @@ function _start (params, callback) {
 
     // Run startup scripts (if present)
     function (callback) {
+      update.warn('!!! Run startup scripts (if present)')
+      // update.warn(`PARAMS: ${JSON.stringify(params)}`)
+      update.warn(`CALLBACK: ${callback}`)
       startupScripts(params, callback)
     },
   ],
   function (err) {
-    if (err) callback(err)
+    if (err){
+      update.warn(`!!! ERR: ${err}`)
+      // update.warn(`PARAMS: ${JSON.stringify(params)}`)
+      update.warn(`CALLBACK: ${callback}`)
+      callback(err)
+    }
     else {
       if (process.env.ARC_AWS_CREDS === 'dummy' && !restart) {
         update.verbose.warn('Missing or invalid AWS credentials or credentials file, using dummy credentials (this is probably ok)')
@@ -117,6 +128,9 @@ function _start (params, callback) {
 }
 
 function _end (params, callback) {
+  console.log("END @@@@@@@@@")
+  // console.log(`PARAMS:: ${JSON.stringify(params)}`)
+  console.log(`CALLBACK:: ${callback}`)
   series([
     function (callback) {
       let options = { method: 'end', name: 'shutdown' }

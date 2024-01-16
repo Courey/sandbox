@@ -14,17 +14,24 @@ module.exports = function spawnChild (params, callback) {
   let pid = 'init'
   let child, error, closed, to, check
   function start () {
+    update.warn(`PARAMS IN SANDBOX SPAWN: ${JSON.stringify(params)}`)
     child = spawn(command, args, options)
     pid = child.pid
 
     child.stdout.on('data', data => process.stdout.write('\n' + data))
     child.stderr.on('data', data => process.stderr.write('\n' + data))
+    update.warn(`spawn child REQUEST ID: ${requestID}`)
+    update.warn(`spawn child PID: ${pid}`)
     child.on('error', err => {
       error = err
       // Seen some non-string oob errors come via binary compilation
       if (err.code) shutdown('error')
     })
     child.on('close', (code, signal) => {
+      update.warn(`CLOSE REQUEST ID: ${requestID}`)
+      update.warn(`CLOSE PID: ${pid}`)
+      update.warn(`CLOSE CODE: ${code}`)
+      update.warn(`CLOSE SIGNAL: ${signal}`)
       update.debug.status(`[${requestID}] Emitted 'close' (pid ${pid}, code '${code}', signal '${signal}')`)
       shutdown('child process closure')
     })
@@ -59,7 +66,7 @@ module.exports = function spawnChild (params, callback) {
     // Only ever begin the shutdown process once per execution
     if (closed) return
     closed = true
-
+    update.warn(`[${requestID}] Shutting down (pid ${pid}, via ${event})`)
     update.debug.status(`[${requestID}] Shutting down (pid ${pid}, via ${event})`)
 
     // Check if the process with specified PID is running or not
@@ -72,7 +79,7 @@ module.exports = function spawnChild (params, callback) {
     catch (err) {
       isRunning = err.code === 'EPERM'
     }
-
+    update.warn(`ISRUNNING: ${isRunning}`)
     // Wrap up here if we can verify the process is no longer running
     if (!isRunning) {
       update.debug.status(`[${requestID}] Process is no longer running (pid ${pid}, process closed: ${isRunning}; termination is not necessary)`)
