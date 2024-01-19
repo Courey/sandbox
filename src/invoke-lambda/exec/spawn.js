@@ -102,6 +102,8 @@ module.exports = function spawnChild (params, callback) {
     }
 
     if (!isInLambda) {
+      console.log("OY. WE MADE IT HERE YO AT THE TOP.")
+      update.warn("OY. WE MADE IT HERE YO AT THE TOP.")
       kill(pid, 'SIGINT', err => {
         if (err) {
           update.debug.status(`[${requestID}] tree-kill process termination error (pid ${pid})`)
