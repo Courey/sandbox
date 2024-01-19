@@ -116,9 +116,15 @@ module.exports = function spawnChild (params, callback) {
       // tree-kill relies on *nix `ps`, which Lambda doesn't have – but it does have /proc
       // Node process.kill() + Lambda Linux /proc/<pid>/task/<tid> is mysterious, so this may not be the best or proper approach
       try {
+        console.log("OY. WE MADE IT HERE YO.")
+        update.warn("OY. WE MADE IT HERE YO.")
         let tasks = readdirSync(`/proc/${pid}/task`)
         tasks.forEach(tid => {
-          try { process.kill(tid) }
+          console.log("LOOPING")
+          update.warn("LOOPING")
+          try {
+            console.log("oh yeah. we are trying....")
+            process.kill(tid) }
           catch (err) {
             // Task may have ended naturally or been killed by killing child.pid, I guess we don't really know
             update.debug.status(`[${requestID}] Did not kill task (pid ${pid}, tid ${tid})`)
