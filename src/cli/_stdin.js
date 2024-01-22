@@ -10,23 +10,6 @@ module.exports = function handleStdin (params) {
     process.stdin.setRawMode(true)
   }
 
-  process.on('SIGINT', () => {
-    console.log('Received SIGINT.');
-    process.exit(0)
-  });//COUREY
-  process.on('SIGTERM', () => {
-    console.log('Received SIGTERM.');
-    process.exit(0)
-  });//COUREY
-  process.on('SIGHUP', () => {
-    console.log('Received SIGHUP.');
-    process.exit(0)
-  });//COUREY
-  process.on('SIGKILL', () => {
-    console.log('Received SIGKILL.');
-    process.exit(0)
-  });//COUREY
-
   process.stdin.on('keypress', function now (input, key) {
     update.warn(`KEYPRESS SEQUENCE: ${key.sequence}`)
     if (input === 'H') {

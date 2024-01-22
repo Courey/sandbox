@@ -10,11 +10,27 @@ module.exports = function spawnChild (params, callback) {
   let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
   let timedOut = false
 
+  process.on('SIGINT', () => {
+    console.log('Received SIGINT.');
+    process.exit(0)
+  });//COUREY
+  process.on('SIGTERM', () => {
+    console.log('Received SIGTERM.');
+    process.exit(0)
+  });//COUREY
+  process.on('SIGHUP', () => {
+    console.log('Received SIGHUP.');
+    process.exit(0)
+  });//COUREY
+  process.on('SIGKILL', () => {
+    console.log('Received SIGKILL.');
+    process.exit(0)
+  });//COUREY
+
   // Let's go!
   let pid = 'init'
   let child, error, closed, to, check
   function start () {
-    update.warn(`PARAMS IN SANDBOX SPAWN: ${JSON.stringify(params)}`)
     child = spawn(command, args, options)
     pid = child.pid
 
