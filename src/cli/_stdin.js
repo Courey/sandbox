@@ -10,9 +10,22 @@ module.exports = function handleStdin (params) {
     process.stdin.setRawMode(true)
   }
 
-  // process.stdin.on('SIGINT', () => {
-  //   console.log('Received SIGINT.');
-  // });//COUREY
+  process.on('SIGINT', () => {
+    console.log('Received SIGINT.');
+    process.exit(0)
+  });//COUREY
+  process.on('SIGTERM', () => {
+    console.log('Received SIGTERM.');
+    process.exit(0)
+  });//COUREY
+  process.on('SIGHUP', () => {
+    console.log('Received SIGHUP.');
+    process.exit(0)
+  });//COUREY
+  process.on('SIGKILL', () => {
+    console.log('Received SIGKILL.');
+    process.exit(0)
+  });//COUREY
 
   process.stdin.on('keypress', function now (input, key) {
     update.warn(`KEYPRESS SEQUENCE: ${key.sequence}`)
@@ -40,15 +53,12 @@ module.exports = function handleStdin (params) {
       })
     }
     if (key.sequence === '\u0003' || key.sequence === '\u0004') {
+      update.warn("END OF TEXT SEQUENCE DETECTED")
       if (watcher) {
         watcher.close().then(end)
       }
       else end()
     }
-    process.on('SIGINT', () => {
-      console.log('Received SIGINT HERE. FINALLY.');
-      exit(0)
-    });//COUREY
   })
 
   function end () {

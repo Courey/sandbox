@@ -8,6 +8,7 @@ module.exports = function cli (options, callback) {
   let flags = getFlags()
   let params = { ...options, ...flags }
   params.quiet = options.quiet || flags.quiet
+
   sandbox.start(params, function watching (err) {
     if (err) {
       sandbox.end()
@@ -39,8 +40,6 @@ module.exports = function cli (options, callback) {
     }
 
     // Handle stdin
-    process.on("SIGINT", ()=> console.log("SIGINT ON LOCAL PROJECT")) //COUREY
-    process.on("SIGTERM", ()=> console.log("SIGTERM ON LOCAL PROJECT")) //COUREY
     stdin({ rehydrate, update, watcher })
   })
 }
