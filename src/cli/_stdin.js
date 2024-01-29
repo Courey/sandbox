@@ -39,6 +39,8 @@ module.exports = function handleStdin (params) {
       }
       else end()
     }
+
+    process.on('exit', end)
   })
 
   function end () {
